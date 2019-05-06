@@ -12,8 +12,6 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping(path="/api") // This means URL's start with /weather (after Application path)
 public class WeatherController {
 
-    private static final Logger log = LoggerFactory.getLogger(WeatherController.class);
-
     private static final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired // This means to get the bean called WeatherRepository
@@ -31,9 +29,7 @@ public class WeatherController {
 
         if (repository.existsByLatitudeAndLongitude(latitude, longitude)) {
 
-            Weather weather = repository.findByLatitudeAndLongitude(latitude,longitude);
-
-            return weather;
+            return repository.findByLatitudeAndLongitude(latitude,longitude);
 
         } else {
 
