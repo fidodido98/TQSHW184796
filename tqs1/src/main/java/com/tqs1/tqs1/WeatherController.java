@@ -29,7 +29,8 @@ public class WeatherController {
 
             return repository.findByLatitudeAndLongitude(latitude,longitude);
 
-        } else {
+        } else
+            {
 
             Weather weather = restTemplate.getForObject(
                     "https://api.darksky.net/forecast/28a3c3fed03114a110538615e5262cbb/" + latitude + "," + longitude, Weather.class);

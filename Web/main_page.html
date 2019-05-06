@@ -1,0 +1,121 @@
+ <!DOCTYPE html>
+<html>
+<meta charset="ISO-8859-1">
+ <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
+<body>
+
+<div class="container">
+    <form>
+            Latitude: <input type="text" name="latitude" id="latitude"><br>
+            Longitude: <input type="text" name="longitude" id="longitude"><br>
+        <button type="button" value="Submit" onclick="submitFunction()">See Details</button>
+    </form> 
+</div>
+
+<div class="container" id="weather"></div>
+
+<div class="container" id="weather_details"></div>
+
+<script>
+   
+    const api='http://localhost:8080/api/weather?latitude=37.8267&longitude=-122.4233'
+
+    fetch(api).then(data=>{return data.json()}).then(res=>{console.log(res)})
+
+    function submitFunction() {
+        
+        la = document.getElementById("latitude").value
+        lo = document.getElementById("longitude").value
+
+        console.log(la)
+        console.log(lo)
+
+        var request = new XMLHttpRequest()
+
+        request.open('GET', 'http://localhost:8080/api/weather?latitude=' + la + '&longitude=' + lo, true)
+
+        request.onload = function() {
+
+            var data = JSON.parse(this.response)
+
+            var mainContainer = document.getElementById("weather")
+
+            if(request.status >= 200 && request.status < 400) {
+                    console.log(data.latitude)
+                    console.log(data.longitude)
+                    
+                    var div = document.createElement("div");
+
+                    div.innerHTML = 'Latitude: ' + data.latitude + ' Longitude: ' + data.longitude + ' Timezone: ' + data.timezone;
+
+                    mainContainer.appendChild(div);
+                    
+                    getWeather(data);
+
+            }else{ 
+                console.log('error')
+            } 
+        }
+
+        request.send()
+
+    }
+
+    function getWeather(data){
+
+        var daily = data.daily.data;
+        var weather_details = document.getElementById("weather_details");
+        var current_day = true;
+
+        for(var data2 in daily){
+
+            var weather_details_row = document.createElement("div");
+
+            weather_details_row.classList.add("row");
+            weather_details_row.classList.add("m-2");
+
+            if(current_day){
+                var info = document.createTextNode("Current Summary: " + daily[data2]['summary']);
+                current_day = false;
+            }else{
+                var info = document.createTextNode("Summary: " + daily[data2]['summary']);
+            }
+
+            var sum = document.createElement("div");
+            sum.classList.add("col-md-4");
+            sum.appendChild(info);
+            var tempMaxInf = document.createTextNode("Max Temp (ºC): " + tempConverter(daily[data2]['temperatureMax']));
+            var tempMax = document.createElement("div");
+            tempMax.classList.add("col-md-4");
+            tempMax.appendChild(tempMaxInf);
+            var tempMinInf = document.createTextNode("Min Temp (ºC): " + tempConverter(daily[data2]['temperatureMin']));
+            var tempMin = document.createElement("div");
+            tempMin.classList.add("col-md-3");
+            tempMin.appendChild(tempMinInf);
+
+            weather_details_row.appendChild(sum);
+            weather_details_row.appendChild(tempMax);
+            weather_details_row.appendChild(tempMin);
+            weather_details.appendChild(weather_details_row);
+
+        }
+
+    }
+
+    function tempConverter(value) {
+        value= parseFloat(value);
+        return parseFloat(Math.round((value-32) / 1.8)).toFixed(0);
+    }
+
+</script>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+</body>
+</html> 

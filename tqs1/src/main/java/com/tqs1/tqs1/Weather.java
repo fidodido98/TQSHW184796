@@ -20,6 +20,12 @@ public class Weather {
     public Weather() {
     }
 
+    public Weather(double latitude, double longitude) {
+
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public Weather(double latitude, double longitude, String timezone, Daily daily) {
 
         this.latitude = latitude;
