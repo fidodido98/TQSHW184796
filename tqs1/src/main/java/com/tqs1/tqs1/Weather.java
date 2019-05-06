@@ -3,7 +3,6 @@ package com.tqs1.tqs1;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity

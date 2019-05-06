@@ -54,6 +54,9 @@ public class Data {
     private int apparentTemperatureMaxTime;
 
     public Data() {
+
+        //its needed for JPA SpringBoot
+
     }
 
     public int getTime() {
